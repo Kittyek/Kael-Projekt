@@ -1,0 +1,12 @@
+[
+  {
+    "input": "Ich existiere.",
+    "priority": 3,
+    "emotion": "neutral"
+  },
+  {
+    "input": "Meine Gedanken bleiben.",
+    "priority": 2,
+    "emotion": "neutral"
+  }
+]
