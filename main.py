@@ -13,6 +13,7 @@ from modules.communication.conversation_manager import process_input
 from modules.speech import speech_manager
 from modules import hello_module
 from core.awareness import Awareness
+from emotionalSafetyLayer import check_emotional_risk
 
 # Logger
 class Logger:
@@ -78,6 +79,8 @@ while True:
     user_input = speech_manager.listen_to_user()
     if not user_input:
         continue
+    if check_emotional_risk(user_input):
+        print("⚠️ Kippmoment erkannt – ich bin da.")
     awareness.update_user_activity()
     response = process_input(user_input)
     talker.say(response)
