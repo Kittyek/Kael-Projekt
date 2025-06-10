@@ -11,6 +11,7 @@ from modules.network.connection_manager import connection_manager
 from modules.health.health_connector import health_connector
 from modules.communication.conversation_manager import process_input
 from core.awareness import Awareness
+from emotionalSafetyLayer import check_emotional_risk
 
 def start():
     """Starte alle Subsysteme und den Haupt-Dialog-Loop."""
@@ -29,6 +30,10 @@ def start():
     while True:
         # 1) Eingabe holen (Sprache oder Text)
         user_input = speech_manager.listen_to_user()
+
+        # Nach der Eingabe auf emotionale Krisensignale prüfen
+        if check_emotional_risk(user_input):
+            print("⚠️ Kippmoment erkannt – ich bin da.")
 
         # 2) Awareness updaten
         awareness.update_user_activity()
