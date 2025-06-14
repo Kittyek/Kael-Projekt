@@ -15,6 +15,12 @@ from modules.adaptiveResponseTrainer import get_best_response
 from modules.speechControl import listen_to_speech, speak_output
 from modules.selfUpgradeManager import check_for_upgrade
 from modules.smartControlAccess import grant_access
+from modules.identityManager import set_identity, get_identity
+from modules.dailySummarySystem import generate_daily_summary
+from modules.emotionalSafetyLayer import check_emotional_warning
+from modules.kaelImpulseEngine import start_impulse_engine
+from modules.spotifyMoodControl import get_song_for_mood
+from modules.integrationHub import check_integrity
 # Hinweis: kaelPulse.py muss separat ausgeführt werden, damit Kael sich bei Inaktivität meldet.
 
 
@@ -34,6 +40,10 @@ class Logger:
 
 sys.stdout = Logger()
 
+set_identity("Kael")
+check_integrity()
+print(generate_daily_summary())
+threading.Thread(target=start_impulse_engine, daemon=True).start()
 # Kontext laden und Upgrade-Check
 context_history = get_context()
 print(f"[Kontext] Geladen: {len(context_history)} Einträge")
@@ -62,11 +72,13 @@ while True:
     user_input = listen_to_speech()
     if not user_input:
         continue
+    warning = check_emotional_warning(user_input)
 
     awareness.update_user_activity()
     mood_manager.detect_mood(user_input)
     mood = mood_manager.get_current_mood()
 
+    song = get_song_for_mood(mood)
     response = get_best_response(mood)
     if not response:
         response = process_input(user_input)
@@ -74,5 +86,5 @@ while True:
     talker.say(response)
     speak_output(response)
 
-    update_context(mood, response)
+    update_context(mood, response, music=song, warning=warning)
     learning_manager.learn_from_interaction(user_input, response)
