@@ -16,5 +16,8 @@ class LearningSystem:
         for entry in self.history:
             print(entry)
 
+# global Instanz, damit andere Module darauf zugreifen können
+learning_manager = LearningSystem()
+
 def start_learning_cycle():
     print("[Learning] (Simulation) Lernzyklus gestartet... (auf Replit deaktiviert)")
